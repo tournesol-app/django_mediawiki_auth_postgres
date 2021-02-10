@@ -1,53 +1,51 @@
 <?php
 
-function login($username, $password) {
-$dbconn = pg_connect("host=localhost port=5432 dbname=tournesol_staging user=tournesol password=Tetu8raiwieGh3I");
-$auth_table = 'auth_user';
+require 'postgres_django_auth.php';
 
-$result = pg_query($dbconn, "select * from $auth_table where username='$username'");
+// command-line interface
+if ('cli' === PHP_SAPI) {
+    $options_default = [
+        "host" => "localhost",
+        "port" => 5432,
+        "dbname" => "tournesol",
+        "db_username" => "tournesol",
+        "auth_table" => "auth_user",
+        "password" => "",
+        "db_password" => "",
+        "username" => "",
+    ];
+    $options = getopt('', ["username:", "password:", "db_password:",
+                           "host::", "port::", "dbname::",
+                           "db_username::", "auth_table::"]);
+    $options = $options + $options_default;
 
-if(!$result) {
-return false;
+    if(!$options['username'] || !$options['password'] || !$options['db_password']) {
+        $fn = $_SERVER['SCRIPT_FILENAME'];
+        echo "Usage: php $fn --username=LOGIN_USERNAME --password=LOGIN_PASSWORD ";
+        echo "--db_password=DB_PASSWORD\n";
+        echo "  [--host=DB_HOST] [--port=DB_PORT] [--dbname=DB_NAME] ";
+        echo "  [--db_username=DB_USERNAME] [--auth_table=AUTH_TABLE]";
+        echo "\n";
+        exit(1);
+    }
+
+    // logging in
+    try {
+        $result = call_user_func_array("login_django_postgres", $options);
+    } catch (Exception $e) {
+        $result = false;
+        $error = $e->getMessage();
+    }
+
+
+    if($result) {
+        echo "Login successful\n";
+        exit(0);
+    }
+    else {
+        echo "Login failed: $error\n";
+        exit(1);
+    }
 }
-
-$n_rows = pg_num_rows($result);
-
-if($n_rows != 1) {
-return false;
-}
-
-echo "$n_rows rows\n";
-
-$rs = pg_fetch_assoc($result);
-
-var_dump($rs);
-
-$password_hashed_db = $rs['password'];
-
-var_dump($password_hashed_db);
-
-list($algo_db, $iterations_db, $salt_db, $hash_db) = explode('$', $password_hashed_db);
-list($algo_db_1, $algo_db_2) = explode('_', $algo_db);
-
-if($algo_db_1 != 'pbkdf2') {
-	echo "Unknown algorithm $algo_db_1";
-	return false;
-}
-
-var_dump($algo_db, $iterations_db, $salt_db);
-
-$supplied_hash_password = base64_encode(hash_pbkdf2($algo_db_2, $password, $salt_db, $iterations_db, 32, true));
-
-echo "$supplied_hash_password\n";
-
-
-return $supplied_hash_password == $hash_db;
-
-
-}
-
-$result = login('harry_potter', 'Iefaegh0Yohdah6k');
-var_dump($result);
-echo "res=$result\n";
 
 ?>
