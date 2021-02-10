@@ -60,6 +60,9 @@ function login_django_postgres($username, $password, $db_password='', $host='loc
 	// hashing the given password
 	$supplied_hash_password = base64_encode(hash_pbkdf2($algo_db_2, $password, $salt_db, $iterations_db, 32, true));
 
+	// close the connection
+	pg_close($dbconn);
+
 	// logged in === hashed($password) == $stored_hash
 	return $supplied_hash_password == $hash_db;
 }
