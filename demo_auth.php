@@ -5,19 +5,21 @@ require 'postgres_django_auth.php';
 // command-line interface
 if ('cli' === PHP_SAPI) {
     $options_default = [
+        "username" => "",
+        "password" => "",
+        "db_password" => "",
         "host" => "localhost",
         "port" => 5432,
         "dbname" => "tournesol",
         "db_username" => "tournesol",
         "auth_table" => "auth_user",
-        "password" => "",
-        "db_password" => "",
-        "username" => "",
     ];
     $options = getopt('', ["username:", "password:", "db_password:",
                            "host::", "port::", "dbname::",
                            "db_username::", "auth_table::"]);
+    // var_dump($options);
     $options = $options + $options_default;
+    // var_dump($options);
 
     if(!$options['username'] || !$options['password'] || !$options['db_password']) {
         $fn = $_SERVER['SCRIPT_FILENAME'];
@@ -32,6 +34,7 @@ if ('cli' === PHP_SAPI) {
     // logging in
     try {
         $result = call_user_func_array("login_django_postgres", $options);
+        $error = "Wrong password";
     } catch (Exception $e) {
         $result = false;
         $error = $e->getMessage();

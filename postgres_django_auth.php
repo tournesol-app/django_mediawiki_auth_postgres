@@ -1,8 +1,8 @@
 <?php
 
-function login_django_postgres($username, $password, $host='localhost', $port=5432,
-                               $dbname='tournesol_staging', $db_username='tournesol',
-                               $db_password='', $auth_table = 'auth_user') {
+function login_django_postgres($username, $password, $db_password='', $host='localhost',
+                               $port=5432, $dbname='tournesol_staging', $db_username='tournesol',
+                               $auth_table = 'auth_user') {
 	/*
 	Log in to a Django database stored in Postgres, assuming pbkdf2-sha256 encryption
 
