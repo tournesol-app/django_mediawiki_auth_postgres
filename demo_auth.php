@@ -33,7 +33,9 @@ if ('cli' === PHP_SAPI) {
 
     // logging in
     try {
-        $result = call_user_func_array("login_django_postgres", $options);
+	$result_arr = call_user_func_array("login_django_postgres", $options);
+	$result = $result_arr['authorized'];
+	$id = $result['id'];
         $error = "Wrong password";
     } catch (Exception $e) {
         $result = false;
@@ -42,7 +44,7 @@ if ('cli' === PHP_SAPI) {
 
 
     if($result) {
-        echo "Login successful\n";
+        echo "Login successful $id\n";
         exit(0);
     }
     else {

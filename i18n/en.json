@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"tournesol"
+		]
+	},
+	"tournesol_username": "Tournesol user name",
+	"tournesol_password": "Tournesol password",
+	"ts_login_btn": "Log in with Tournesol"
+}
+

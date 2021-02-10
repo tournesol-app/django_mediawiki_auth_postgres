@@ -17,7 +17,8 @@ function login_django_postgres($username, $password, $db_password='', $host='loc
 		$auth_table: Postgres Django authentication table
 
 	Returns:
-	    true if the login was successful, false on authentication failure
+	    [authorized==true if the login was successful, false on authentication failure
+	    id is a unique identified]
 	    throws exceptions in case if connection failed/database does not exist/user does not exist
 	*/
 
@@ -47,6 +48,7 @@ function login_django_postgres($username, $password, $db_password='', $host='loc
 	// obtaining the password for the single row
 	$rs = pg_fetch_assoc($result);
 	$password_hashed_db = $rs['password'];
+	$id_db = $rs['id'];
 
 	// destructuring password parameters
 	list($algo_db, $iterations_db, $salt_db, $hash_db) = explode('$', $password_hashed_db);
@@ -64,7 +66,7 @@ function login_django_postgres($username, $password, $db_password='', $host='loc
 	pg_close($dbconn);
 
 	// logged in === hashed($password) == $stored_hash
-	return $supplied_hash_password == $hash_db;
+	return ['authorized' => $supplied_hash_password == $hash_db, 'id' => $id_db];
 }
 
 ?>

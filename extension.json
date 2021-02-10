@@ -1,0 +1,24 @@
+{
+	"name": "DjangoAuth",
+	"version": "1.0",
+	"author": [
+		"Tournesol"
+	],
+	"url": "https://github.com/tournesol-app/django_mediawiki_auth_postgres",
+	"descriptionmsg": "Authenticate with Django Postgres",
+	"type": "other",
+	"license-name": "MIT",
+	"AutoloadClasses": {
+		"AuthDjangoPlugin": "includes/AuthDjangoPlugin.php"
+	},
+	"manifest_version": 1,
+	"Hooks": {
+		"BeforeInitialize": "AuthDjangoPlugin::onBeforeInitialize"
+	},
+	"MessagesDirs": {
+		"PluggableAuth": [
+			"i18n"
+		]
+	}
+}
+
