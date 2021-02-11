@@ -35,7 +35,7 @@ if ('cli' === PHP_SAPI) {
     try {
 	$result_arr = call_user_func_array("login_django_postgres", $options);
 	$result = $result_arr['authorized'];
-	$id = $result['id'];
+	$id = $result_arr['id'];
         $error = "Wrong password";
     } catch (Exception $e) {
         $result = false;
