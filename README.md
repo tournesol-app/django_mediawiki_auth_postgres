@@ -3,6 +3,8 @@
 This repository implements a custom authenticator for MediaWiki that tries to log in with credentials
 stored in a Django Posgres database. Currently, only pbkdf2-sha256 hashing is supported.
 
+See the wiki page [Contribute to Tournesol](https://wiki.tournesol.app/index.php/Contribute_to_Tournesol) for details.
+
 Tested with MediaWiki 1.35.1 and Django 3.0.7.
 
 ### File structure:
